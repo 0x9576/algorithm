@@ -2,7 +2,7 @@
 #include<vector>
 using namespace std;
 vector<int> v;
-int M, n, in;
+int M, n, in,T;
 
 int count_sum(int m) {
 	if (m < 0)
@@ -16,10 +16,14 @@ int count_sum(int m) {
 }
 
 int main() {
-	cin >> M >> n;
-	for (int i = 0; i < n; i++) {
-		scanf("%d", &in);
-		v.push_back(in);
+	cin >> T;
+	while (T--) {
+		v.clear();
+		cin >> M >> n;
+		for (int i = 0; i < n; i++) {
+			scanf("%d", &in);
+			v.push_back(in);
+		}
+		cout << count_sum(M) << endl;
 	}
-	cout << count_sum(M) << endl;
 }
