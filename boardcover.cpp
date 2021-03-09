@@ -1,11 +1,14 @@
 #include<iostream>
+#include<vector>
 using namespace std;
 int T;
-char L[4][2][2] = { {{'.','#'},{'#','#'}},{{'#','.'},{'#','#'}},{{'#','#'},{'#','.'}},{{'#','#'},{'.','#'}} };
-int h, w, ans, ta, tb, la, lb;
-char board[24][24],o[24][24];
+char L[5][2][2] = { {{'.','#'},{'#','#'}},{{'#','.'},{'#','#'}},{{'#','#'},{'#','.'}},{{'#','#'},{'.','#'}},{{'.','.'},{'.','.'}} };
+int h, w, ans;
+char board[24][24];
 
-void find() {
+vector<pair<int, int>> v;
+
+/*void find() {
 	for (int j = 1; j <= h; j++) {
 		for (int k = 1; k <= w; k++) {
 			if (board[j][k] == '.') {
@@ -15,7 +18,7 @@ void find() {
 			}
 		}
 	}
-}
+}*/
 
 bool all_filled() {
 	for (int i = 1; i < 24; i++)
@@ -38,23 +41,34 @@ bool possible(int z, int a, int b) {
 	return true;
 }
 
-void cover(int a, int b) {
-	cout << a << " " << b << endl;
+void cover(int s) {
+	int a = v[s].first;
+	int b = v[s].second;
+	/*cout << a << " " << b << endl;
 	for (int i = 1; i <= h; i++) {
 		for (int j = 1; j <= w; j++)
 			cout << board[i][j];
 		cout << endl;
 	}
-	cout << endl;
-	if (all_filled()) {
-		ans++;
+	cout << endl;*/
+	if (s == v.size()-1) {
+		if (all_filled()) {
+			ans++;
+		}
+		return;
 	}
+	for (int i = 1; i <= h; i++)
+		for (int j = 1; j <= w; j++) {
+			if (board[i][j] == '.' && i < a)
+				return;
+		}
 
 	//find(a, b);
 	//cover(ta, tb);
-	for (int i = 0; i < 4; i++)
+	int co = 0;
+	for (int i = 0; i < 5; i++)
 		if (possible(i, a, b)) {
-			//cout << i << endl;
+			//cout << possible(2, a, b)<< endl;
 			char nb[24][24] = { 0, };
 			for (int j = 0; j < 24; j++)
 				for (int k = 0; k < 24; k++)
@@ -67,22 +81,19 @@ void cover(int a, int b) {
 				}
 			//cout<<board[a][b]<<nb[a][b];
 			//find(a,b);
-			for (int j = 1; j <= h; j++) {
-				for (int k = 1; k <= w; k++) {
-					if(board[j][k]=='.')
-						cover(j, k);
-				}
-			}
+			co++;
+			if(s+1<v.size())
+				cover(s+1);
 			for (int c = 0; c < 2; c++)
 				for (int d = 0; d < 2; d++)
 					board[a + c][b + d] = nb[a + c][b + d];
-
 		}
 }
 
 int main() {
 	cin >> T;
 	while (T--) {
+		v.clear();
 		ans = 0;
 		cin >> h >> w;
 		for (int i = 0; i < 24; i++)
@@ -91,19 +102,20 @@ int main() {
 		for (int i = 1; i <= h; i++)
 			for (int j = 1; j <= w; j++) {
 				cin >> board[i][j];
-				o[i][j] = board[i][j];
-				if (board[i][j] == '.') {
-					la = i;
-					lb = j;
-				}
+				//if (board[i][j] == '.') {
+					v.push_back({ i,j });
+				//}
 			}
 		/*for (int i = 1; i <= h; i++)
 			for (int j = 1; j <= w; j++)
 				cout << board[i][j]*/
-		find();
+		//find();
 		//cout << L[2][1][1];
 		//cout << ta << " " << tb << endl;
-		cover(ta, tb);
+		if (!v.empty())
+			cover(0);
+		else
+			ans = 1;
 		cout << ans << endl;
 	}
 }
