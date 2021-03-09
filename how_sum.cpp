@@ -3,7 +3,7 @@
 using namespace std;
 vector<int> v;
 vector<int> ans;
-int M, n, in;
+int M, n, in, T;
 
 void how_sum(int m, vector<int> list) {
 	if (!m) {
@@ -21,14 +21,29 @@ void how_sum(int m, vector<int> list) {
 }
 
 int main() {
-	cin >> M >> n;
-	for (int i = 0; i < n; i++) {
-		scanf("%d", &in);
-		v.push_back(in);
-	}
-	vector<int> vec;
-	how_sum(M,vec);
-	for (int i = 0; i < ans.size(); i++) {
-		printf("%d ", ans[i]);
+	cin >> T;
+	while (T--) {
+		v.clear();
+		ans.clear();
+		cin >> M >> n;
+		for (int i = 0; i < n; i++) {
+			scanf("%d", &in);
+			v.push_back(in);
+		}
+		if (!M) {
+			printf("0\n");
+			continue;
+		}
+		vector<int> vec;
+		how_sum(M, vec);
+		if (!ans.empty()) {
+			cout << ans.size()<<" ";
+			for (int i = 0; i < ans.size(); i++) {
+				printf("%d ", ans[i]);
+			}
+		}
+		else
+			printf("-1");
+		puts("");
 	}
 }

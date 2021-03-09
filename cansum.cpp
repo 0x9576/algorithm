@@ -2,7 +2,7 @@
 #include<vector>
 using namespace std;
 vector<int> v;
-int M,n,in;
+int M,n,in,T;
 
 bool can_sum(int m) {
 	if (m < 0)
@@ -16,13 +16,17 @@ bool can_sum(int m) {
 }
 
 int main() {
-	cin >> M>>n;
-	for (int i = 0; i < n; i++) {
-		scanf("%d", &in);
-		v.push_back(in);
+	cin >> T;
+	while (T--) {
+		v.clear();
+		cin >> M >> n;
+		for (int i = 0; i < n; i++) {
+			scanf("%d", &in);
+			v.push_back(in);
+		}
+		if (can_sum(M))
+			cout << "true" << endl;
+		else
+			cout << "false" << endl;
 	}
-	if (can_sum(M))
-		cout << "true" << endl;
-	else
-		cout << "false" << endl;
 }
