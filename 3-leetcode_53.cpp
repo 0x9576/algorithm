@@ -29,7 +29,7 @@ int mergeSort(int arr[], int p, int r) {
 	if (r - p < 1)
 		return 0;
 	int q = (p + r) / 2;
-	mergeSort(arr, p, q), mergeSort(arr, q + 1, r) + merge(arr, p, q, r);
+	return mergeSort(arr, p, q), mergeSort(arr, q + 1, r) + merge(arr, p, q, r);
 }
 
 int main() {
