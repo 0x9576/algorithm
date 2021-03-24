@@ -3,8 +3,8 @@
 #include<utility>
 #include<vector>
 #include<cmath>
-#define PP pair<pair<int,int>,P>
 #define P pair<int,int>
+#define PP pair<P,P>
 
 using namespace std;
 vector<P>vx;
