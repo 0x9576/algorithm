@@ -1,11 +1,15 @@
 #include<iostream>
 #include<random>
-#include<vector>
 #include<algorithm>
 using namespace std;
-int ran;
+
+random_device rd;
+mt19937 mt(rd());
+
 int choose_pivot(int left, int right) {
-	return ran % (right - left) + left;
+	uniform_int_distribution<int> dis(left, right);
+	int ran = dis(mt);
+	return ran;
 }
 
 int partition(int* A, int left, int right, int pos) {
@@ -35,18 +39,13 @@ int main() {
 	int T, N;
 	cin >> T;
 	while (T--) {
-		random_device rd;
-		mt19937 mt(rd());
-		uniform_int_distribution<int> dis(0, 10001);
-		ran = dis(mt);
 		cin >> N;
-		int p;
 		int A[10001] = { 0, };
 		for (int i = 0; i < N; i++) {
 			scanf("%d", A + i);
 		}
 		quicksort(A, 0, N - 1);
-		for (unsigned int i = 0; i < N; i++)
+		for (int i = 0; i < N; i++)
 			printf("%d ", A[i]);
 		puts("");
 	}
