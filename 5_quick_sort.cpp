@@ -2,7 +2,7 @@
 #include<random>
 #include<algorithm>
 using namespace std;
-
+//quicksort (random pivot pick)
 random_device rd;
 mt19937 mt(rd());
 
