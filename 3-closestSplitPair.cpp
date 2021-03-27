@@ -8,7 +8,6 @@
 
 using namespace std;
 vector<P>vx,vy;
-float bestd;
 
 float d(P p1, P p2) {
     return (float) sqrt(pow(p1.first - p2.first, 2) + pow(p1.second - p2.second, 2));
@@ -39,8 +38,8 @@ PP closet_split_pair(vector<P> &Px, vector<P> &Py, float delta) {
 
 PP closet_pair(vector<P> Px, vector<P> Py) {
     if (Px.size() <= 3) {
-        float mn = bestd;
         PP tp = { {0,0},{99999,99999} };
+        float mn = d(tp.first, tp.second);
         for (int i = 0; i < Px.size() - 1; i++)
             for (int j = i + 1; j < Px.size(); j++) {
                 float dis = d(Px[i], Px[j]);
@@ -71,11 +70,8 @@ PP closet_pair(vector<P> Px, vector<P> Py) {
     PP rig = closet_pair(Rx, Ry);
     float ld = d(lef.first, lef.second);
     float rd = d(rig.first, rig.second);
-    bestd = min(bestd, min(ld, rd));
-
     PP spl = closet_split_pair(Px, Py, min(ld, rd));
     float sd = d(spl.first, spl.second);
-    bestd = min(bestd, sd);
 
     if (ld <= rd && ld <= sd)
         return lef;
@@ -91,7 +87,6 @@ int main() {
         vx.clear();
         vy.clear();
         cin >> N;
-        bestd = (float) 999999.99;
         for (int i = 0; i < N; i++) {
             scanf("%d %d", &v1, &v2);
             vx.push_back({ v1,v2 });
