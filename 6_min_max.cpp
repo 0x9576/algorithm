@@ -1,13 +1,13 @@
 #include<iostream>
 using namespace std;
+int s[10004] = { 0, };
 
 int main() {
 	int T, N;
-	cin >> T;
+	scanf("%d", &T);
 	while (T--) {
-		cin >> N;
-		int s[10001] = { 0, };
-		for (int i = 1; i < N; i++) {
+		scanf("%d", &N);
+		for (int i = 1; i <= N; i++) {
 			scanf("%d", s + i);
 		}
 		int mx = 0, mn = 0;
@@ -35,6 +35,6 @@ int main() {
 			}
 			i += 2;
 		}
-		cout << mx << " " << mn << endl;
+		printf("%d %d\n", mx, mn);
 	}
 }

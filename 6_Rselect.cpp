@@ -41,9 +41,9 @@ int Rselect(int* A, int left, int right,int i) {
 int main() {
 	int T, N,k;
 	cin >> T;
+	int A[10003] = { 0, };
 	while (T--) {
-		cin >> N>>k;
-		int A[10003] = { 0, };
+		cin >> N >> k;
 		for (int i = 1; i <= N; i++) {
 			scanf("%d", A + i);
 		}
