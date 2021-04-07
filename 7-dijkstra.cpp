@@ -78,7 +78,8 @@ public:
 	void change_priority(int index, int key) {
 		if (heap[index] == key) return;
 		int prev_key{ heap[index] };
-		if (prev_key) reheap_down(index);
+		heap[index] = key;
+		if (prev_key>key) reheap_down(index);
 		else reheap_up(index);
 	}
 	void remove(int index) {
