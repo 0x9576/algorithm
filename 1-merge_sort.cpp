@@ -1,9 +1,9 @@
 #include <iostream>
 using namespace std;
 
-void merge(int arr[], int p, int q, int r) {
+void merge(int *arr, int p, int q, int r) {
     int i = p, j = q + 1, k = p;
-    int tmp[20000];
+    int tmp[20000] = { 0, };
     while (i <= q && j <= r) {
         if (arr[i] <= arr[j]) tmp[k++] = arr[i++];
         else tmp[k++] = arr[j++];
@@ -13,7 +13,7 @@ void merge(int arr[], int p, int q, int r) {
     for (int a = p; a <= r; a++) arr[a] = tmp[a];
 }
 
-void mergeSort(int arr[], int p, int r) {
+void mergeSort(int *arr, int p, int r) {
     int q;
     if (p < r) {
         q = (p + r) / 2;

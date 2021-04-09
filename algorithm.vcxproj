@@ -19,8 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="7-dijkstra.cpp" />
-    <ClCompile Include="7-dijkstra2.cpp" />
+    <ClCompile Include="나무판자.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
