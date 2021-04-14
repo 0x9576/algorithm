@@ -4,29 +4,27 @@ using namespace std;
 
 int find(int start, int end, int* wood) {
 	if (start == end)
-		return wood[start];
+		return wood[end];
 	int mid = (start + end) / 2;
-	int ret = max(find(start, mid, wood), find(mid + 1, end, wood));
+	int mx = max(find(start, mid, wood), find(mid + 1, end, wood));
 	int high = mid + 1, low = mid;
 	int h = min(wood[high], wood[low]);
-	ret = max(ret, h * 2);
-
-	while (high < end || low >start) {
-		if (high < end && (low == start || wood[low - 1] < wood[high + 1]))
+	mx = max(mx,2* h);
+	while (start < low || high < end) {
+		if (start == low || wood[high + 1] > wood[low - 1])
 			h = min(h, wood[++high]);
 		else
 			h = min(h, wood[--low]);
-		ret = max(ret, h * (high - low + 1));
+		mx = max(mx,h * (high - low + 1));
 	}
-	return ret;
+	return mx;
 }
 
 int main() {
 	int T;
-	int wood[20001] = { 0, }, N;
 	cin >> T;
 	while (T--) {
-
+		int wood[20001] = { 0, }, N;
 		cin >> N;
 		for (int i = 0; i < N; i++)
 			cin >> wood[i];

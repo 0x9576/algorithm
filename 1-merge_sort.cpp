@@ -1,25 +1,26 @@
 #include <iostream>
 using namespace std;
 
-void merge(int *arr, int p, int q, int r) {
-    int i = p, j = q + 1, k = p;
-    int tmp[20000] = { 0, };
-    while (i <= q && j <= r) {
-        if (arr[i] <= arr[j]) tmp[k++] = arr[i++];
-        else tmp[k++] = arr[j++];
+void merge(int *arr, int start, int mid, int end) {
+    int low = start, high = mid + 1, idx = start, tem[20000] = { 0, };
+    while (low <= mid || high <= end) {
+        if (arr[low] < arr[high])
+            tem[idx++] = arr[low++];
+        else
+            tem[idx++] = arr[high++];
     }
-    while (i <= q) tmp[k++] = arr[i++];
-    while (j <= r) tmp[k++] = arr[j++];
-    for (int a = p; a <= r; a++) arr[a] = tmp[a];
+    while (low <= mid) tem[idx++] = arr[low++];
+    while (high <= end) tem[idx++] = arr[high++];
+    for (int i = start; i <= end; i++)
+        arr[i] = tem[i];
 }
 
-void mergeSort(int *arr, int p, int r) {
-    int q;
-    if (p < r) {
-        q = (p + r) / 2;
-        mergeSort(arr, p, q);
-        mergeSort(arr, q + 1, r);
-        merge(arr, p, q, r);
+void merge_sort(int *arr, int start, int end) {
+    int mid = (start + end) / 2;
+    if (start < end) {
+        merge_sort(arr, start, mid);
+        merge_sort(arr, mid+1, end);
+        merge(arr, start, mid, end);
     }
 }
 
@@ -27,12 +28,12 @@ int main() {
     int T;
     cin >> T;
     while (T--) {
-        int arr[10001], i, N;
+        int arr[10001], N;
         cin >> N;
         for (int i = 0; i < N; i++) {
             scanf("%d", arr + i);
         }
-        mergeSort(arr, 0, N-1);
+        merge_sort(arr, 0, N-1);
         for (int i = 0; i < N; i++) {
             printf("%d ", arr[i]);
         }
