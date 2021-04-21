@@ -19,7 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LRU_cache.cpp" />
+    <ClCompile Include="9-kruskal.cpp" />
+    <ClCompile Include="9-prim.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

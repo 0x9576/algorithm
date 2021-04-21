@@ -15,7 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LRU_cache.cpp">
+    <ClCompile Include="9-kruskal.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="9-prim.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
