@@ -3,74 +3,49 @@
 #include<map>
 using namespace std;
 
-class LRU {
-	typedef map<int, pair<int,list<int>::iterator>> MAP;
-	MAP cache;
-	list<int> lis;
-	int size;
-public:
-	LRU(int s) {
-		size = s;
-	}
-
-	int get(int key) {
-		auto it = cache.find(key);
-		if (it != cache.end())
-		{
-			move(it);
-			return it->second.first;
-		}
-		else
-			return -1;
-	}
-
-	void put(int key, int value) {
-		auto it = cache.find(key);
-		if (it != cache.end())
-			move(it);
-
-		else
-		{
-			if (size == cache.size())
-			{
-				cache.erase(lis.back());
-				lis.pop_back();
-			}
-			lis.push_front(key);
-		}
-		cache[key] = { value, lis.begin() };
-
-	}
-	void move(MAP::iterator it)
-	{
-		int key = it->first;
-		lis.push_front(key);
-		lis.erase(it->second.second);
-		it->second.second = lis.begin();
-	}
-};
-
-
 int main() {
 	int T;
 	cin >> T;
 	while (T--) {
 		list <int> lis;
-		int C, N, K, V;
+		int C, N, K, V, cache[1003], count = 0;
+		map <int, list<int>::iterator > iter_map;
+		map <int, list<int>::iterator >::iterator iter;
+		for (int i = 0; i < 1003; i++)
+			cache[i] = -1;
 		bool put_get;
 
 		cin >> C >> N;
-		LRU lru(C);
 		for (int i = 0; i < N; i++) {
 			cin >> put_get;
 			if (put_get) { //get
 				cin >> K;
-				cout << lru.get(K) << " ";
+				cout << cache[K] << " ";
 			}
 			else { //put
 				cin >> K >> V;
-				lru.put(K, V);
+				if (cache[K] != -1) {
+					cache[K] = V;
+				}
+				else {
+					if (C > count) {
+						cache[K] = V;
+						count++;
+					}
+					else {
+						int k = lis.back();
+						cache[k] = -1;
+						iter_map.erase(k);
+						lis.pop_back();
+						cache[K] = V;
+					}
+				}
 			}
+			iter = iter_map.find(K);
+			if (iter != iter_map.end())
+				lis.erase(iter->second);
+			lis.push_front(K);
+			iter_map.insert({ K, lis.begin() });
 		}
 		cout << endl;
 	}
