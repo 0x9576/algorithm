@@ -1,135 +1,108 @@
-#include <iostream>
+#include<iostream>
+#include<algorithm>
+#include<unordered_set>
+#include<vector>
+#include<queue>
+
 using namespace std;
+
 int N;
+int min_length;
+int G[23][23];
 
-int final_path[22];
+struct Node {
+	int level;
+	int bound;
+	vector<int> tour;
+	unordered_set <int> unvisited;
+};
 
-bool visited[22];
+struct compare {
+	bool operator()(Node a, Node b) {
+		return a.bound < b.bound;
+	}
+};
 
-int final_res = INT_MAX;
-
-void copyToFinal(int curr_path[])
-{
-    for (int i = 0; i < N; i++)
-        final_path[i] = curr_path[i];
-    final_path[N] = curr_path[0];
+int length(Node node) {
+	int ret = 0;
+	for (int i = 0; i < node.tour.size() - 1; i++) {
+		ret += G[node.tour[i]][node.tour[i + 1]];
+	}
+	return ret;
 }
 
-int firstMin(int adj[][22], int i)
-{
-    int min = INT_MAX;
-    for (int k = 0; k < N; k++)
-        if (adj[i][k] < min && i != k)
-            min = adj[i][k];
-    return min;
+int compute_bound(Node node) {
+	int bound = 0;
+	bound += length(node);
+	vector<int> tem;
+	for (int a : node.unvisited) {
+		tem.push_back(a);
+	}
+	for (int i = 0; i < tem.size(); i++) {
+		int min_w = -1;
+		for (int j = 0; j < tem.size(); j++) {
+			if (tem[i] != tem[j])
+				min_w = min(min_w, G[tem[i]][tem[j]]);
+		}
+		bound += min_w;
+	}
+	return bound;
 }
 
-int secondMin(int adj[][22], int i)
+void tsp(int N)
 {
-    int first = INT_MAX, second = INT_MAX;
-    for (int j = 0; j < N; j++)
-    {
-        if (i == j)
-            continue;
+	priority_queue <Node, vector<Node>, compare > q;
+	Node root;
+	root.level = 0;
+	root.tour.push_back(1);
+	for (int i = 2; i <= N; i++)
+		root.unvisited.insert(i);
+	root.bound = compute_bound(root);
+	q.push(root);
+	min_length = INT_MAX;
 
-        if (adj[i][j] <= first)
-        {
-            second = first;
-            first = adj[i][j];
-        }
-        else if (adj[i][j] <= second &&
-            adj[i][j] != first)
-            second = adj[i][j];
-    }
-    return second;
+	while (!q.empty())
+	{
+		Node node = q.top();
+		q.pop();
+		if (node.bound < min_length) {
+			for (int i = 2; i <= N; i++) {
+				if (!node.unvisited.count(i))
+					continue;
+				if (G[node.level][i] == INT_MAX)
+					continue;
+				Node next = node;
+				next.level = node.level + 1;
+				next.tour.push_back(i);
+				next.unvisited.erase(i);
+				if (next.level == N - 2) {
+					if (length(next) < min_length)
+						min_length = length(next);
+				}
+				else {
+					next.bound = compute_bound(next);
+					cout << next.bound << endl;
+					if (next.bound < min_length) q.push(next);
+				}
+			}
+		}
+	}
 }
 
-void TSPRec(int adj[][22], int curr_bound, int curr_weight,
-    int level, int curr_path[])
-{
-    if (level == N)
-    {
-        if (adj[curr_path[level - 1]][curr_path[0]] != 0)
-        {
-            int curr_res = curr_weight +
-                adj[curr_path[level - 1]][curr_path[0]];
-            if (curr_res < final_res)
-            {
-                copyToFinal(curr_path);
-                final_res = curr_res;
-            }
-        }
-        return;
-    }
-    for (int i = 0; i < N; i++)
-    {
-        if (adj[curr_path[level - 1]][i] != 0 &&
-            visited[i] == false)
-        {
-            int temp = curr_bound;
-            curr_weight += adj[curr_path[level - 1]][i];
-
-            if (level == 1)
-                curr_bound -= ((firstMin(adj, curr_path[level - 1]) +
-                    firstMin(adj, i)) / 2);
-            else
-                curr_bound -= ((secondMin(adj, curr_path[level - 1]) +
-                    firstMin(adj, i)) / 2);
-
-            if (curr_bound + curr_weight < final_res)
-            {
-                curr_path[level] = i;
-                visited[i] = true;
-                TSPRec(adj, curr_bound, curr_weight, level + 1,
-                    curr_path);
-            }
-            curr_weight -= adj[curr_path[level - 1]][i];
-            curr_bound = temp;
-
-            memset(visited, false, sizeof(visited));
-            for (int j = 0; j <= level - 1; j++)
-                visited[curr_path[j]] = true;
-        }
-    }
-}
-
-void TSP(int adj[][22])
-{
-    int curr_path[22];
-
-    int curr_bound = 0;
-    memset(curr_path, -1, sizeof(curr_path));
-    memset(visited, 0, sizeof(visited));
-    memset(final_path, 0, sizeof(final_path));
-
-    for (int i = 0; i < N; i++)
-        curr_bound += (firstMin(adj, i) +
-            secondMin(adj, i));
-
-    curr_bound = (curr_bound & 1) ? curr_bound / 2 + 1 :
-        curr_bound / 2;
-
-    visited[0] = true;
-    curr_path[0] = 0;
-
-    TSPRec(adj, curr_bound, 0, 1, curr_path);
-}
-
-int main()
-{
-    int T, adj[22][22];
-    cin >> T;
-    while (T--) {
-        const int A = N;
-        cin >> N;
-        final_res = INT_MAX;
-        for (int i = 0; i < N; i++)
-            for (int j = 0; j < N; j++)
-                cin >> adj[i][j];
-        TSP(adj);
-        printf("%d\n", final_res);
-    }
-
-
-    return 0;
+int main() {
+	int T;
+	cin >> T;
+	while (T--) {
+		int N;
+		cin >> N;
+		min_length = INT_MAX;
+		for (int i = 1; i <= N; i++)
+			for (int j = 1; j <= N; j++) {
+				cin >> G[i][j];
+				if (G[i][j] == -1 || !G[i][j])
+					G[i][j] = INT_MAX;
+			}
+		tsp(N);
+		cout << min_length << endl;
+	}
 }
