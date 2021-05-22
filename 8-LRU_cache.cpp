@@ -1,6 +1,6 @@
 #include<iostream>
 #include<list>
-#include<map>
+#include<unordered_map>
 using namespace std;
 
 int main() {
@@ -9,8 +9,8 @@ int main() {
 	while (T--) {
 		list <int> lis;
 		int C, N, K, V, cache[1003], count = 0;
-		map <int, list<int>::iterator > iter_map;
-		map <int, list<int>::iterator >::iterator iter;
+		unordered_map <int, list<int>::iterator > iter_map;
+		unordered_map <int, list<int>::iterator >::iterator iter;
 		for (int i = 0; i < 1003; i++)
 			cache[i] = -1;
 		bool put_get;
